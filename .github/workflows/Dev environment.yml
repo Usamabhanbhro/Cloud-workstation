@@ -1,0 +1,29 @@
+name: Cloud Workstation
+
+on:
+  workflow_dispatch:
+
+jobs:
+  workstation:
+    runs-on: ubuntu-latest
+    timeout-minutes: 360 # Hard job limit
+
+    steps:
+      - name: Checkout Workstation Repository
+        uses: actions/checkout@v4
+
+      - name: Make Scripts Executable
+        run: chmod +x ./scripts/*
+
+      - name: Bootstrap Base System
+        run: ./scripts/bootstrap.sh
+
+      - name: Connect to Tailscale Network
+        uses: tailscale/github-action@v2
+        with:
+          oauth-client-id: ${{ secrets.TAILSCALE_OAUTH_CLIENT_ID }}
+          oauth-secret: ${{ secrets.TAILSCALE_OAUTH_SECRET }}
+          tags: tag:ci
+
+      - name: Launch Interactive Terminal Server
+        run: ./scripts/start-terminal.sh
