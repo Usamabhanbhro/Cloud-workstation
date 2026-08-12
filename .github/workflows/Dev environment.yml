@@ -1,4 +1,4 @@
-name: Cloud Workstation
+Name: Cloud Workstation
 
 on:
   workflow_dispatch:
@@ -18,12 +18,13 @@ jobs:
       - name: Bootstrap Base System
         run: ./scripts/bootstrap.sh
 
-      - name: Connect to Tailscale Network
-        uses: tailscale/github-action@v2
+      - name: Connect to Tailscale Network with SSH
+        uses: tailscale/github-action@v3
         with:
           oauth-client-id: ${{ secrets.TAILSCALE_OAUTH_CLIENT_ID }}
           oauth-secret: ${{ secrets.TAILSCALE_OAUTH_SECRET }}
           tags: tag:ci
+          ssh: true
 
-      - name: Launch Interactive Terminal Server
-        run: ./scripts/start-terminal.sh
+      - name: Launch Persistent Session
+        run: ./scripts/start-session.sh
