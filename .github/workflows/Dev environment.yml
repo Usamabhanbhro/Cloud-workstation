@@ -1,4 +1,4 @@
-Name: Cloud workstation
+name: Cloud workstation
 
 on:
   workflow_dispatch:
